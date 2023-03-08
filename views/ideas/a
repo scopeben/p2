@@ -1,0 +1,24 @@
+export const putEditIdeas = (req, res) => {
+  Idea.findOne({
+    _id: req.params.id,
+  }).then((idea) => {
+    let edit_error_msg = "";
+    if (!req.body.title) {
+      edit_error_msg += "Please add a title";
+    }
+    if (!req.body.details) {
+      edit_error_msg += "Please add some details";
+    }
+    if (edit_error_msg) {
+      req.flash("error_msg", edit_error_msg);
+      res.redirect("/ideas/edit/" + idea._id);
+    } else {
+      idea.title = req.body.title;
+      idea.details = req.body.details;
+      idea.save().then(() => {
+        req.flash("success_msg", "Note updated !");
+        res.redirect("/ideas");
+      });
+    }
+  });
+};
