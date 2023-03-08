@@ -12,6 +12,11 @@ import Idea from "./models/Idea.js";
 import ideasRoute from "./routes/ideasRoute.js";
 import usersRoute from "./routes/usersRoute.js";
 
+import passport from "passport";
+import passportConfig from "./config/passportConfig.js";
+
+passportConfig(passport);
+
 // import {
 //   getIdeas,
 //   getAddIdeas,
@@ -49,6 +54,9 @@ app.use(
   })
 );
 
+app.use(passport.initialize());
+app.use(passport.session());
+
 //connect -flash store flash messages in session,
 //therefore the setup of express-session is needed
 app.use(flash());
@@ -56,6 +64,9 @@ app.use(flash());
 app.use(function (req, res, next) {
   res.locals.success_msg = req.flash("success_msg"); //gobal var
   res.locals.error_msg = req.flash("error_msg");
+  res.locals.fail_passport = req.flash("fail_passport");
+  res.locals.user = req.user || null;
+  console.log("--- login user ---", res.locals.user);
   next();
 });
 

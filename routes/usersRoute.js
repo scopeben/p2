@@ -1,6 +1,8 @@
 import express from "express";
 import bcrypt from "bcryptjs";
 import User from "../models/User.js";
+// import passportConfig from "../config/passportConfig.js";
+import passport from "passport";
 
 const router = express.Router();
 
@@ -34,29 +36,60 @@ router.post("/register", (req, res) => {
       password2: req.body.password2,
     });
   } else {
-    const newUser = new User({
-      name: req.body.name,
-      email: req.body.email,
-      password: req.body.password,
-    });
-    bcrypt.genSalt(10, (err, salt) => {
-      bcrypt.hash(newUser.password, salt, (err, hash) => {
-        if (err) throw err;
-        newUser.password = hash;
-        newUser
-          .save()
-          .then(() => {
-            req.flash("success_msg", "Register Done !");
-            res.redirect("/users/login");
-          })
-          .catch((err) => {
-            console.log(err);
-            req.flash("error_msg", "Server went wrong!");
-            res.redirect("/users/register");
+    User.findOne({ email: req.body.email }).then((user) => {
+      if (user) {
+        console.log(user);
+        req.flash("error_msg", "Email already register !");
+        res.redirect("/users/register");
+      } else {
+        const newUser = new User({
+          name: req.body.name,
+          email: req.body.email,
+          password: req.body.password,
+        });
+
+        bcrypt.genSalt(10, (err, salt) => {
+          bcrypt.hash(newUser.password, salt, (err, hash) => {
+            if (err) throw err;
+            newUser.password = hash;
+            newUser
+              .save()
+              .then(() => {
+                req.flash("success_msg", "Register Done !");
+                res.redirect("/users/login");
+              })
+              .catch((err) => {
+                console.log(err);
+                req.flash("error_msg", "Server went wrong!");
+                res.redirect("/users/register");
+              });
           });
-      });
+        });
+      }
     });
+
     // res.redirect("/");
   }
+});
+
+router.get("/login", (req, res) => {
+  res.render("users/login");
+});
+
+router.post("/login", (req, res, next) => {
+  passport.authenticate("local", {
+    successRedirect: "/ideas",
+    failureRedirect: "/users/login",
+    failureFlash: true,
+    //session: false,
+  })(req, res, next);
+});
+
+router.get("/logout", (req, res) => {
+  req.logout((err) => {
+    if (err) throw err;
+  });
+  req.flash("success_msg", "You are logged out !");
+  res.redirect("/users/login");
 });
 export default router;
