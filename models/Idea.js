@@ -11,6 +11,11 @@ const IdeaSchema = new Schema({
     type: String,
     required: true,
   },
+  userID: {
+    type: mongoose.Types.ObjectId,
+    required: true,
+  },
+
   date: {
     type: Date,
     default: Date.now,

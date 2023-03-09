@@ -15,6 +15,12 @@ import usersRoute from "./routes/usersRoute.js";
 import passport from "passport";
 import passportConfig from "./config/passportConfig.js";
 
+import dotenv from "dotenv";
+dotenv.config();
+
+console.log(process.env.PORT);
+console.log(process.env.mongoURI);
+
 passportConfig(passport);
 
 // import {
@@ -30,10 +36,10 @@ passportConfig(passport);
 import methodOverrdie from "method-override";
 
 const app = express();
-const PORT = 5000;
+const PORT = process.env.PORT || 5100;
 
 mongoose
-  .connect("mongodb://localhost:27017/note-dev")
+  .connect(process.env.mongoURI)
   .then(() => console.log("Mongodb connected.."))
   .catch((err) => console.log(err));
 
@@ -51,7 +57,7 @@ app.use(
     secret: "anything",
     resave: true,
     saveUninitialized: true,
-    cookie: { maxAge: 300000 },
+    cookie: { maxAge: 60 * 1000 },
   })
 );
 
@@ -80,12 +86,15 @@ app.get("/about", (req, res) => {
   res.render("about");
 });
 
+app.use(methodOverrdie("_method"));
+import ensureauthenticated from "./helpers/auth.js";
+
+app.use("/ideas", ensureauthenticated, ideasRoute);
+
 app.use(function (req, res, next) {
   console.log("Time", Date.now());
   next();
 });
-
-app.use(methodOverrdie("_method"));
 
 // app.get("/ideas", getIdeas);
 // app.get("/ideas/add", getAddIdeas);
@@ -94,7 +103,7 @@ app.use(methodOverrdie("_method"));
 // app.get("/ideas/edit/(:id)", getEditIdeas);
 // app.put("/ideas/edit/:id", putEditIdeas);
 
-app.use("/ideas", ideasRoute);
+// app.use("/ideas", ideasRoute);
 app.use("/users", usersRoute);
 
 //set up express-session

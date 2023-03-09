@@ -1,10 +1,12 @@
 import Idea from "../models/Idea.js";
 export const getIdeas = (req, res) => {
-  Idea.find()
+  Idea.find({ userID: res.locals.user._id })
     .lean()
     .sort({ data: "desc" })
     .then((ideas) => {
       console.log(ideas);
+      //res.locals.ideas = ideas;
+      //res.render("ideas/ideasindex");
       res.render("ideas/ideasindex", { ideas: ideas });
     });
 };
@@ -35,6 +37,8 @@ export const postAddIdeas = (req, res) => {
     const newUser = {
       title: req.body.title,
       details: req.body.details,
+      userID: res.locals.user._id,
+      // userID: req.user.id,
     };
     new Idea(newUser).save().then(() => {
       req.flash("success_msg", "Note Added!");

@@ -189,10 +189,14 @@ const router = express.Router();
 //   res.redirect("/users/login");
 // };
 
-router.get("/register", getRegister);
-router.post("/register", postRegister);
-router.get("/login", getLogin);
-router.post("/login", postLogin);
-router.get("/logout", getLogout);
+// router.get("/register", getRegister);
+// router.post("/register", postRegister);
+// router.get("/login", getLogin);
+// router.post("/login", postLogin);
+// router.get("/logout", getLogout);
+
+router.route("/register").get(getRegister).post(postRegister);
+router.route("/login").get(getLogin).post(postLogin);
+router.route("logout").get(getLogout);
 
 export default router;
