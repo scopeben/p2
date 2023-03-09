@@ -51,6 +51,7 @@ app.use(
     secret: "anything",
     resave: true,
     saveUninitialized: true,
+    cookie: { maxAge: 300000 },
   })
 );
 
@@ -71,6 +72,7 @@ app.use(function (req, res, next) {
 });
 
 app.get("/", (req, res) => {
+  console.log(req.session.cookie.maxAge / 1000);
   res.render("index", { title: "Welcome !" });
 });
 

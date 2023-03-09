@@ -24,7 +24,7 @@
           <a class="nav-link" href="/about">About</a>
         </li>
 
-        <div class="dropdown">
+        {{! <div class="dropdown">
           <a
             class="btn btn-secondary dropdown-toggle"
             href="#"
@@ -41,19 +41,46 @@
             <a class="dropdown-item" href="/users/login">Login</a>
             <a class="dropdown-item" href="/users/register">Register</a>
           </div>
-        </div>
+        </div> }}
 
         <ul class="navbar-nav ml-auto">
-          <li class="nav-item">
-            <a class="nav-link" href="/users/login">Login</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/users/register">Register</a>
-          </li>
+          {{#if user}}
+            {{! <div class="dropdown"> }}
+            <li class="nav-item dropdown">
+              <a
+                class="btn btn-secondary dropdown-toggle"
+                href="#"
+                role="button"
+                data-toggle="dropdown"
+                aria-expanded="false"
+              >
+                Notes
+              </a>
 
-          <li class="nav-item">
-            <a class="nav-link" href="/users/logout">logout</a>
-          </li>
+              <div class="dropdown-menu">
+                <a class="dropdown-item" href="/ideas">Notes</a>
+                <a class="dropdown-item" href="/ideas/add">Add</a>
+                {{! <a class="dropdown-item" href="/users/login">Login</a> }}
+                {{! <a class="dropdown-item" href="/users/register">Register</a> }}
+              </div>
+            </li>
+            {{! </div> }}
+            <li class="nav-item">
+              <a class="nav-link" href="/users/logout">logout</a>
+            </li>
+          {{else}}
+            <li class="nav-item">
+              <a class="nav-link" href="/users/login">Login</a>
+            </li>
+
+            <li class="nav-item">
+              <a class="nav-link" href="/users/register">Register</a>
+            </li>
+
+            {{! <li class="nav-item">
+              <a class="nav-link" href="/users/logout">logout</a>
+            </li> }}
+          {{/if}}
         </ul>
       </ul>
 
