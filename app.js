@@ -39,10 +39,10 @@ const app = express();
 const PORT = process.env.PORT || 5100;
 
 mongoose
-  .connect(process.env.mongoURI)
+  // .connect(process.env.mongoURI)
+  .connect("mongodb://localhost:27017/note-dev")
   .then(() => console.log("Mongodb connected.."))
   .catch((err) => console.log(err));
-
 //setup handlebars middleware
 app.engine("handlebars", engine());
 app.set("view engine", "handlebars");
@@ -136,4 +136,5 @@ app.get("*", (req, res) => {
 
 app.listen(PORT, () => {
   console.log(`Server started on port ${PORT}`);
+  console.log(`http://localhost:${PORT}`);
 });
