@@ -74,7 +74,7 @@ app.use(function (req, res, next) {
   res.locals.error_msg = req.flash("error_msg");
   res.locals.fail_passport = req.flash("fail_passport");
   res.locals.user = req.user || null;
-  console.log("--- login user ---", res.locals.user);
+  // console.log("--- login user ---", res.locals.user);
   next();
 });
 

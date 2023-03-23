@@ -2,6 +2,36 @@ import passport from "passport";
 import bcrypt from "bcryptjs";
 import User from "../models/User.js";
 
+import multer from "multer";
+import * as fs from "fs";
+import exp from "constants";
+
+const storageSetting = multer.diskStorage({
+  destination: (req, res, cb) => {
+    cb(null, "./uploads");
+  },
+  filename: (req, res, cd) => {
+    cb(null, file.originalname);
+  },
+});
+
+export const uploadAvatar = multer({
+  storage: storageSetting,
+  fileFilter: (req, res, cb) => {
+    const mimetype = file.mimetype;
+    if (
+      mimetype === "image/png" ||
+      mimetype === "image/jpg" ||
+      mimetype === "image/jpeg" ||
+      mimetype === "image/gif"
+    ) {
+      cb(null, true);
+    } else {
+      req.flash("error_msg", "Wrong file type for avatar !");
+      cd(null, false);
+    }
+  },
+});
 export const getRegister = (req, res) => {
   res.render("users/register");
 };
@@ -86,4 +116,15 @@ export const getLogout = (req, res) => {
   });
   req.flash("success_msg", "You are logged out !");
   res.redirect("/users/login");
+};
+
+export const getProfile = (req, res) => {
+  res.render("users/profile", {
+    name: res.locals.user.name,
+    email: res.locals.user.email,
+  });
+};
+
+export const postProfile = (req, res) => {
+  res.redirect("/users/profile");
 };
