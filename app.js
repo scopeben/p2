@@ -49,6 +49,7 @@ app.set("view engine", "handlebars");
 app.set("views", "./views");
 app.use(morgan("tiny"));
 
+app.use(express.static("views/public"));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 

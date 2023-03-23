@@ -100,3 +100,29 @@ export const putEditIdeas = (req, res) => {
     }
   });
 };
+
+export const getRecords = (req, res) => {
+  Idea.aggregate([
+    {
+      $lookup: {
+        from: "users",
+        localField: "userID",
+        foreignField: "_id",
+        as: "userInfo",
+      },
+    },
+    {
+      $unwind: {
+        path: "$userInfo",
+        preserveNullAndEmptyArrays: true,
+      },
+    },
+    {
+      $sort: {
+        date: -1,
+      },
+    },
+  ]).then((records) => {
+    res.render("ideas/records", { records: records });
+  });
+};
