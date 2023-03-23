@@ -1,5 +1,11 @@
 <nav class="navbar navbar-expand-sm navbar-dark bg-primary mb-3">
   <div class="container">
+    <div class="logo">
+      <a href="/">
+        <img src="/img/favicon.ico" alt="logo" width="50" height="50" />
+      </a>
+
+    </div>
     <a class="navbar-brand" href="/">Notes Sites</a>
     {{! <button class="navbar-toggler" type="button" data-toggle="collpase" data-target="nabarNavDropdown"
       aria-controls="nabarNavDropdown" aria-expanded="false" aria-label="=Toggle navigation"> }}
@@ -60,11 +66,17 @@
               <div class="dropdown-menu">
                 <a class="dropdown-item" href="/ideas">Notes</a>
                 <a class="dropdown-item" href="/ideas/add">Add</a>
+                <a href="/ideas/records" class="dropdown-item">Show All Records</a>
                 {{! <a class="dropdown-item" href="/users/login">Login</a> }}
                 {{! <a class="dropdown-item" href="/users/register">Register</a> }}
               </div>
             </li>
             {{! </div> }}
+
+            <li class="nav-item">
+              <a class="nav-link" href="/users/profile">profile</a>
+            </li>
+
             <li class="nav-item">
               <a class="nav-link" href="/users/logout">logout</a>
             </li>

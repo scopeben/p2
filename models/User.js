@@ -13,6 +13,11 @@ const UserSchema = new Schema({
   password: {
     type: String,
   },
+
+  avatar: {
+    data: { type: Buffer },
+    contentType: { type: String },
+  },
 });
 
 const User = mongoose.model("users", UserSchema);

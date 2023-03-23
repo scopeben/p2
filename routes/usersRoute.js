@@ -9,6 +9,8 @@ import {
   getLogin,
   postLogin,
   getLogout,
+  getProfile,
+  postProfile,
 } from "../controllers/usersController.js";
 
 // const router = express.Router();
@@ -197,6 +199,7 @@ const router = express.Router();
 
 router.route("/register").get(getRegister).post(postRegister);
 router.route("/login").get(getLogin).post(postLogin);
-router.route("logout").get(getLogout);
+router.route("/logout").get(getLogout);
+router.route("/profile").get(getProfile).post(postProfile);
 
 export default router;
