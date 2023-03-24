@@ -4,6 +4,25 @@
   <p><b>Your Avatar:</b>
     form
   </p>
+
+  {{#if avatar.data}}
+    <img
+      src="data:image/{{avatar.contentType}};base64,
+  {{avater.data}}"
+      width="50"
+      height="50"
+    />
+    <form action="/users/profile?_method=DELETE" method="POST">
+      <input type="hidden" name="_method" value="DELETE" />
+      <input
+        type="submit"
+        class="btn btn-danger btn-block"
+        value="Delete Avatar"
+      />
+    </form>
+  {{else}}
+    No Avater shown
+  {{/if}}
   <br />
   <form action="/users/profile" enctype="multipart/form-data" method="POST">
     <div>
