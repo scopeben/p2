@@ -5,20 +5,22 @@ import User from "../models/User.js";
 import multer from "multer";
 import * as fs from "fs";
 import exp from "constants";
+import { unlink } from "fs";
 
 const storageSetting = multer.diskStorage({
-  destination: (req, res, cb) => {
+  destination: (req, file, cb) => {
     cb(null, "./uploads");
   },
-  filename: (req, res, cd) => {
+  filename: (req, file, cd) => {
     cb(null, file.originalname);
   },
 });
 
 export const uploadAvatar = multer({
   storage: storageSetting,
-  fileFilter: (req, res, cb) => {
+  fileFilter: (req, file, cb) => {
     const mimetype = file.mimetype;
+    console.log("mimetype", mimetype);
     if (
       mimetype === "image/png" ||
       mimetype === "image/jpg" ||
@@ -31,7 +33,8 @@ export const uploadAvatar = multer({
       cd(null, false);
     }
   },
-});
+}).single("avatarUpload");
+
 export const getRegister = (req, res) => {
   res.render("users/register");
 };
@@ -122,9 +125,43 @@ export const getProfile = (req, res) => {
   res.render("users/profile", {
     name: res.locals.user.name,
     email: res.locals.user.email,
+    avatar: res.locals.user.avatar,
   });
 };
 
 export const postProfile = (req, res) => {
-  res.redirect("/users/profile");
+  User.findOne({ _id: res.locals.user._id }).then((user) => {
+    if (req.file) {
+      let avatarData = fs.readFileSync(req.file.path).toString("base64");
+      let avatarContentType = req.file.mimetype;
+
+      user.avatar.data = avatarData;
+      user.avatar.contentType = avatarContentType;
+
+      fs.unlink(req.file.path, (err) => {
+        if (err) throw err;
+      });
+
+      user.save().then(() => {
+        req.flash("success_msg", "avatar uploaded !");
+        res.redirect("/users/profile");
+      });
+    } else {
+      req.flash(
+        "error_msg",
+        "Choose a correct file before clicking 'Upload Avater' button"
+      );
+      res.redirect("/users/profile");
+    }
+  });
+  // res.redirect("/users/profile");
+};
+
+export const deleteProfile = (req, res) => {
+  User.updateOne({ _id: res.locals.user._id }, { $unset: { avatar: "" } }).then(
+    () => {
+      req.flash("success_msg", "Delete Avatar successfully!");
+      res.redirect("/users/profile");
+    }
+  );
 };

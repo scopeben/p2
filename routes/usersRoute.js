@@ -11,7 +11,10 @@ import {
   getLogout,
   getProfile,
   postProfile,
+  uploadAvatar,
+  deleteProfile,
 } from "../controllers/usersController.js";
+import ensureauthenticated from "../helpers/auth.js";
 
 // const router = express.Router();
 
@@ -201,5 +204,8 @@ router.route("/register").get(getRegister).post(postRegister);
 router.route("/login").get(getLogin).post(postLogin);
 router.route("/logout").get(getLogout);
 router.route("/profile").get(getProfile).post(postProfile);
+// router.post("/profile", uploadAvatar, postProfile);
+router.post("/profile", ensureauthenticated, uploadAvatar, postProfile);
+router.delete("/profile", ensureauthenticated, deleteProfile);
 
 export default router;
