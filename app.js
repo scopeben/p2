@@ -2,7 +2,7 @@ import express from "express";
 import { engine } from "express-handlebars";
 import morgan from "morgan";
 import bodyParser from "body-parser";
-
+// import ServerlessHttpnp from "serverless-http";
 //import flash and express-session
 import flash from "connect-flash";
 import session from "express-session";
@@ -16,6 +16,7 @@ import passport from "passport";
 import passportConfig from "./config/passportConfig.js";
 
 import dotenv from "dotenv";
+// import compression from "compression";
 dotenv.config();
 
 console.log(process.env.PORT);
@@ -39,8 +40,8 @@ const app = express();
 const PORT = process.env.PORT || 5100;
 
 mongoose
-  // .connect(process.env.mongoURI)
-  .connect("mongodb://localhost:27017/note-dev")
+  .connect(process.env.mongoURI)
+  // .connect("mongodb://localhost:27017/note-dev")
   .then(() => console.log("Mongodb connected.."))
   .catch((err) => console.log(err));
 //setup handlebars middleware
@@ -49,6 +50,7 @@ app.set("view engine", "handlebars");
 app.set("views", "./views");
 app.use(morgan("tiny"));
 
+// app.use(compression());
 app.use(express.static("views/public"));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -89,6 +91,7 @@ app.get("/about", (req, res) => {
 
 app.use(methodOverrdie("_method"));
 import ensureauthenticated from "./helpers/auth.js";
+// import compression from "compression";
 
 app.use("/ideas", ensureauthenticated, ideasRoute);
 
