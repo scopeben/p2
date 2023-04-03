@@ -40,8 +40,8 @@ const app = express();
 const PORT = process.env.PORT || 5100;
 
 mongoose
-  .connect(process.env.mongoURI)
-  // .connect("mongodb://localhost:27017/note-dev")
+  // .connect(process.env.mongoURI)
+  .connect("mongodb://localhost:27017/note-dev")
   .then(() => console.log("Mongodb connected.."))
   .catch((err) => console.log(err));
 //setup handlebars middleware
